@@ -2,6 +2,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 
+import apiV1Routes from './api/v1/index.js';
 import { ENV } from './config/env.js';
 
 dotenv.config();
@@ -36,5 +37,8 @@ app.get(`/`, (_req, res) => {
         environment: ENV.NODE_ENV || `development`,
     });
 });
+
+// API v1 Routes
+app.use(`/api`, apiV1Routes);
 
 export default app;
