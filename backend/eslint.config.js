@@ -44,12 +44,7 @@ export default [
             ...eslintConfigPrettier.rules,
             'no-console': 'off',
             'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-            'prettier/prettier': [
-                'error',
-                {
-                    endOfLine: 'auto',
-                },
-            ],
+            'prettier/prettier': 'error',
             'import/order': [
                 'error',
                 {
