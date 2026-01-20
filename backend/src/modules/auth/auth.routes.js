@@ -1,17 +1,16 @@
 import express from 'express';
 
+import { register, login, getCurrentUser } from './auth.controller.js';
+
 const router = express.Router();
 
-router.get('/login', (_req, res) => {
-    res.status(200).json({ message: 'Login route' });
-});
+// POST /api/auth/register - Register new user
+router.post('/register', register);
 
-router.get('/register', (_req, res) => {
-    res.status(200).json({ message: 'Register route' });
-});
+// POST /api/auth/login - User login
+router.post('/login', login);
 
-router.get('/me', (_req, res) => {
-    res.status(200).json({ message: 'Route to get Current User' });
-});
+// GET /api/auth/me - Get current authenticated user
+router.get('/me', getCurrentUser);
 
 export default router;
