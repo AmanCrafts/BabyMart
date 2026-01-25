@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 
 import User from '../../models/user.model.js';
+import { generateToken } from '../../utils/jwt.js';
 
 export async function register(userData) {
     const { name, email, mobile, password, role } = userData;
@@ -45,12 +46,16 @@ export async function login({ identifier, password }) {
         throw new Error('Invalid credentials');
     }
 
-    // TODO: Generate JWT token
+    // Generate JWT token
+    const token = await generateToken(
+        { id: user._id, email: user.email, role: user.role },
+        { expiresIn: '7d' }
+    );
 
     return {
         message: 'Login successful',
         userId: user._id,
-        // token: generatedToken,
+        token,
     };
 }
 
