@@ -1,6 +1,6 @@
 import express from 'express';
 
-import authenticate from '../../middleware/auth.middleware.js';
+import { authenticate } from '../../middleware/auth.middleware.js';
 
 import { register, login, getCurrentUser } from './auth.controller.js';
 

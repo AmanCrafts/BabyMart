@@ -1,9 +1,9 @@
 import User from '../models/user.model.js';
-import { verifyToken, getTokenFromHeader } from '../utils/jwt.js';
+import { getTokenFromHeader, verifyToken } from '../utils/jwt.js';
 
 export async function authenticate(req, res, next) {
     try {
-        const authHeader = req.headers.authorization;
+        const authHeader = req.headers?.authorization;
         const token = getTokenFromHeader(authHeader);
 
         if (!token) {
@@ -11,7 +11,7 @@ export async function authenticate(req, res, next) {
         }
 
         const decoded = await verifyToken(token);
-        const user = await User.findById(decoded.id).select('-password');
+        const user = await User.findById(decoded._id).select('-password');
 
         if (!user) {
             return res.status(401).json({ error: 'User not found' });
@@ -25,4 +25,11 @@ export async function authenticate(req, res, next) {
     }
 }
 
-export default authenticate;
+export function authorizeRoles(...allowedRoles) {
+    return (req, res, next) => {
+        if (!req?.user || !allowedRoles.includes(req.user.role)) {
+            return res.status(403).json({ error: 'Access denied' });
+        }
+        next();
+    };
+}
