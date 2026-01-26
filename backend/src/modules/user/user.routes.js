@@ -13,8 +13,8 @@ const router = express.Router();
 router.use(authenticate, authorizeRoles('admin'));
 
 // GET /api/users/ - Get all users (Protected)
-router.get('/', getUser);
-// POST /api/users/ - Create a new user (Protected)
+router.get('/', authorizeRoles('admin'), getUser);
+// POST /api/users/ - Create a new user
 router.post('/', createUser);
 
 export default router;

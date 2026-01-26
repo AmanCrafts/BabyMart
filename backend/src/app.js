@@ -38,6 +38,16 @@ app.get(`/`, (_req, res) => {
     });
 });
 
+// Health Check Endpoint
+app.get(`/health`, (_req, res) => {
+    res.status(200).json({
+        status: 'ok',
+        message: 'BabyMart API is healthy',
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+    });
+});
+
 // API v1 Routes
 app.use(`/api`, apiV1Routes);
 

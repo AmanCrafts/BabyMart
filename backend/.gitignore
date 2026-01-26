@@ -24,6 +24,7 @@ node_modules
 # misc
 .DS_Store
 *.pem
+changes.md
 
 # debug
 npm-debug.log*
