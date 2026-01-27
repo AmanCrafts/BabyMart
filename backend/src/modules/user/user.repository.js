@@ -37,3 +37,60 @@ export async function updateUser(userId, updateData) {
 export async function deleteUser(userId) {
     return await User.findByIdAndDelete(userId);
 }
+
+export async function findUserByIdWithPassword(userId) {
+    return await User.findById(userId);
+}
+
+export async function addAddressToUser(userId, addressData) {
+    const user = await User.findById(userId);
+    if (!user) return null;
+
+    // If this address is set as default, unset other defaults
+    if (addressData.isDefault) {
+        user.addresses.forEach(addr => {
+            addr.isDefault = false;
+        });
+    }
+
+    user.addresses.push(addressData);
+    await user.save();
+    return user.addresses;
+}
+
+export async function updateAddressInUser(userId, addressId, updateData) {
+    const user = await User.findById(userId);
+    if (!user) return null;
+
+    const address = user.addresses.id(addressId);
+    if (!address) return { error: 'Address not found' };
+
+    // If setting this as default, unset other defaults
+    if (updateData.isDefault) {
+        user.addresses.forEach(addr => {
+            addr.isDefault = false;
+        });
+    }
+
+    // Update address fields
+    Object.keys(updateData).forEach(key => {
+        if (updateData[key] !== undefined) {
+            address[key] = updateData[key];
+        }
+    });
+
+    await user.save();
+    return user.addresses;
+}
+
+export async function removeAddressFromUser(userId, addressId) {
+    const user = await User.findById(userId);
+    if (!user) return null;
+
+    const address = user.addresses.id(addressId);
+    if (!address) return { error: 'Address not found' };
+
+    address.deleteOne();
+    await user.save();
+    return user.addresses;
+}
