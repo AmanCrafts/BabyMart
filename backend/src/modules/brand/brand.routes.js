@@ -7,14 +7,23 @@ import {
     updateBrand,
     deleteBrand,
 } from './brand.controller.js';
+import {
+    authenticate,
+    authorizeRoles,
+} from '../../middleware/auth.middleware.js';
 
 const router = express.Router();
 
 router
     .get('/', getAllBrands)
     .get('/:id', getBrandById)
-    .post('/', createNewBrand)
-    .put('/:id', updateBrand)
-    .delete('/:id', deleteBrand);
+    .post('/', authenticate, authorizeRoles('admin', 'seller'), createNewBrand)
+    .put('/:id', authenticate, authorizeRoles('admin', 'seller'), updateBrand)
+    .delete(
+        '/:id',
+        authenticate,
+        authorizeRoles('admin', 'seller'),
+        deleteBrand
+    );
 
 export default router;
