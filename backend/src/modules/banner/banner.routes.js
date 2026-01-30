@@ -1,4 +1,10 @@
 import express from 'express';
+
+import {
+    authenticate,
+    authorizeRoles,
+} from '../../middleware/auth.middleware.js';
+
 import {
     getAllBanners,
     getBannerById,
@@ -6,10 +12,6 @@ import {
     updateBanner,
     deleteBanner,
 } from './banner.controller.js';
-import {
-    authenticate,
-    authorizeRoles,
-} from '../../middleware/auth.middleware.js';
 
 const router = express.Router();
 

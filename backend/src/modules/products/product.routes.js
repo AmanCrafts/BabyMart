@@ -1,6 +1,11 @@
 import express from 'express';
 
 import {
+    authenticate,
+    authorizeRoles,
+} from '../../middleware/auth.middleware.js';
+
+import {
     getAllProducts,
     getProductById,
     getProductsByCategory,
@@ -8,10 +13,6 @@ import {
     updateProduct,
     deleteProduct,
 } from './product.controller.js';
-import {
-    authenticate,
-    authorizeRoles,
-} from '../../middleware/auth.middleware.js';
 
 const router = express.Router();
 

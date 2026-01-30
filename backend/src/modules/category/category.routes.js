@@ -1,4 +1,10 @@
 import express from 'express';
+
+import {
+    authenticate,
+    authorizeRoles,
+} from '../../middleware/auth.middleware.js';
+
 import {
     getAllCategories,
     getCategoryById,
@@ -6,10 +12,6 @@ import {
     updateCategory,
     deleteCategory,
 } from './category.controller.js';
-import {
-    authenticate,
-    authorizeRoles,
-} from '../../middleware/auth.middleware.js';
 
 const router = express.Router();
 

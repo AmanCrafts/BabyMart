@@ -1,16 +1,17 @@
 import express from 'express';
 
 import {
+    authenticate,
+    authorizeRoles,
+} from '../../middleware/auth.middleware.js';
+
+import {
     getAllBrands,
     getBrandById,
     createNewBrand,
     updateBrand,
     deleteBrand,
 } from './brand.controller.js';
-import {
-    authenticate,
-    authorizeRoles,
-} from '../../middleware/auth.middleware.js';
 
 const router = express.Router();
 

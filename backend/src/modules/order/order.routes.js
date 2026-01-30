@@ -1,4 +1,10 @@
 import express from 'express';
+
+import {
+    authenticate,
+    authorizeRoles,
+} from '../../middleware/auth.middleware.js';
+
 import {
     getAllOrders,
     getOrderById,
@@ -6,10 +12,6 @@ import {
     createNewOrder,
     updateOrderStatus,
 } from './order.controller.js';
-import {
-    authenticate,
-    authorizeRoles,
-} from '../../middleware/auth.middleware.js';
 
 const router = express.Router();
 
