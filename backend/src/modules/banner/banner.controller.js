@@ -1,3 +1,5 @@
+import { uploadImageToCloudinary } from '../../utils/cloudinary.js';
+
 import * as bannerService from './banner.service.js';
 
 export const getAllBanners = async (req, res) => {
@@ -24,7 +26,17 @@ export const getBannerById = async (req, res) => {
 
 export const createNewBanner = async (req, res) => {
     try {
-        const banner = await bannerService.createNewBanner(req.body);
+        let imageUrl = '';
+        if (req.file) {
+            imageUrl = await uploadImageToCloudinary(
+                req.file.buffer,
+                'banners'
+            );
+        }
+        const banner = await bannerService.createNewBanner({
+            ...req.body,
+            imageUrl,
+        });
         res.status(201).json({ success: true, data: banner });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });

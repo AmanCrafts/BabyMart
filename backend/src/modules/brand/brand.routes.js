@@ -4,6 +4,7 @@ import {
     authenticate,
     authorizeRoles,
 } from '../../middleware/auth.middleware.js';
+import { upload } from '../../middleware/upload.middleware.js';
 
 import {
     getAllBrands,
@@ -18,8 +19,20 @@ const router = express.Router();
 router
     .get('/', getAllBrands)
     .get('/:id', getBrandById)
-    .post('/', authenticate, authorizeRoles('admin', 'seller'), createNewBrand)
-    .put('/:id', authenticate, authorizeRoles('admin', 'seller'), updateBrand)
+    .post(
+        '/',
+        authenticate,
+        authorizeRoles('admin', 'seller'),
+        upload.single('image'),
+        createNewBrand
+    )
+    .put(
+        '/:id',
+        authenticate,
+        authorizeRoles('admin', 'seller'),
+        upload.single('image'),
+        updateBrand
+    )
     .delete(
         '/:id',
         authenticate,

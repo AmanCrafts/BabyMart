@@ -1,3 +1,5 @@
+import { uploadImageToCloudinary } from '../../utils/cloudinary.js';
+
 import * as productService from './product.service.js';
 
 export const getAllProducts = async (req, res) => {
@@ -36,7 +38,16 @@ export const getProductsByCategory = async (req, res) => {
 
 export const createNewProduct = async (req, res) => {
     try {
-        const product = await productService.createNewProduct(req.body);
+        let images = [];
+        if (req.files && req.files.length > 0) {
+            const uploadPromises = req.files.map(file =>
+                uploadImageToCloudinary(file.buffer, 'products')
+            );
+            const urls = await Promise.all(uploadPromises);
+            images = urls.map(url => ({ url }));
+        }
+        const productData = { ...req.body, images };
+        const product = await productService.createNewProduct(productData);
         res.status(201).json({ success: true, data: product });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });

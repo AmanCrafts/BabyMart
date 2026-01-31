@@ -1,3 +1,5 @@
+import { uploadImageToCloudinary } from '../../utils/cloudinary.js';
+
 import * as brandService from './brand.service.js';
 
 export const getAllBrands = async (req, res) => {
@@ -25,7 +27,14 @@ export const getBrandById = async (req, res) => {
 
 export const createNewBrand = async (req, res) => {
     try {
-        const brand = await brandService.createNewBrand(req.body);
+        let imageUrl = '';
+        if (req.file) {
+            imageUrl = await uploadImageToCloudinary(req.file.buffer, 'brands');
+        }
+        const brand = await brandService.createNewBrand({
+            ...req.body,
+            imageUrl,
+        });
         res.status(201).json({ success: true, data: brand });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
@@ -34,7 +43,14 @@ export const createNewBrand = async (req, res) => {
 
 export const updateBrand = async (req, res) => {
     try {
-        const brand = await brandService.updateBrand(req.params.id, req.body);
+        let updateData = { ...req.body };
+        if (req.file) {
+            updateData.imageUrl = await uploadImageToCloudinary(
+                req.file.buffer,
+                'brands'
+            );
+        }
+        const brand = await brandService.updateBrand(req.params.id, updateData);
         res.status(200).json({ success: true, data: brand });
     } catch (error) {
         if (error.message === 'Brand not found') {

@@ -4,6 +4,7 @@ import {
     authenticate,
     authorizeRoles,
 } from '../../middleware/auth.middleware.js';
+import { upload } from '../../middleware/upload.middleware.js';
 
 import {
     getAllProducts,
@@ -24,9 +25,16 @@ router
         '/',
         authenticate,
         authorizeRoles('admin', 'seller'),
+        upload.array('images', 5),
         createNewProduct
     )
-    .put('/:id', authenticate, authorizeRoles('admin', 'seller'), updateProduct)
+    .put(
+        '/:id',
+        authenticate,
+        authorizeRoles('admin', 'seller'),
+        upload.array('images', 5),
+        updateProduct
+    )
     .delete(
         '/:id',
         authenticate,
